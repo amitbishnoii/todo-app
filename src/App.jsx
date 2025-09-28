@@ -9,7 +9,7 @@ function App() {
   const [todos, setTodos] = useState([])
 
   const handleAdd = () => {
-    setTodos([...todos, {id: uuidv4(), todo, isCompleted: false}]);
+    setTodos([...todos, { id: uuidv4(), todo, isCompleted: false }]);
     settodo("")
     console.log(todos);
   }
@@ -19,12 +19,22 @@ function App() {
   }
 
   const handleCheckbox = (e) => {
-     const id = e.currentTarget.name;
+    const id = e.currentTarget.name;
     setTodos(prevTodos =>
       prevTodos.map(todo =>
         todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
       )
     );
+  };
+
+  const handleDelete = (e) => {
+    let id = e.target.name;
+    let index = todos.findIndex(item=>{
+      return item.id === id;
+    })
+    let newtodos = [...todos]
+    newtodos.splice(index, 1);
+    setTodos(newtodos);
   };
 
   return (
@@ -44,14 +54,14 @@ function App() {
 
         {todos.map(item => {
           return <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
-            
-            <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id=''/>
 
-            <div className={item.isCompleted?"line-through":""}>{item.todo}</div>
+            <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id='' />
+
+            <div className={item.isCompleted ? "line-through" : ""}>{item.todo}</div>
 
             <div className="buttons flex gap-2.5 items-center text-sm font-bold">
               <button className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
-              <button className="bg-red-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Delete</button>
+              <button name={item.id} onClick={handleDelete} className="bg-red-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Delete</button>
             </div>
           </div>
         })}
