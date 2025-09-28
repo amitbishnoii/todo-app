@@ -37,6 +37,17 @@ function App() {
     setTodos(newtodos);
   };
 
+  const handleEdit = (e) => {
+    let edittodo = prompt("enter new todo: ")
+    let id = e.target.name;
+    let index = todos.findIndex(item=>{
+      return item.id === id
+    })
+    let newTodos = [...todos];
+    newTodos[index].todo = edittodo
+    setTodos(newTodos)
+  };
+
   return (
     <>
       <Navbar />
@@ -60,7 +71,7 @@ function App() {
             <div className={item.isCompleted ? "line-through" : ""}>{item.todo}</div>
 
             <div className="buttons flex gap-2.5 items-center text-sm font-bold">
-              <button className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
+              <button name={item.id} onClick={handleEdit} className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
               <button name={item.id} onClick={handleDelete} className="bg-red-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Delete</button>
             </div>
           </div>
