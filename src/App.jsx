@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
+import { v4 as uuidv4 } from 'uuid'
 
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
   const [todos, setTodos] = useState([])
 
   const handleAdd = () => {
-    setTodos([...todos, {todo, isCompleted: "false"}]);
+    setTodos([...todos, {id: uuidv4(), todo, isCompleted: false}]);
     settodo("")
     console.log(todos);
   }
@@ -16,6 +17,15 @@ function App() {
   const handleChange = (e) => {
     settodo(e.target.value)
   }
+
+  const handleCheckbox = (e) => {
+     const id = e.currentTarget.name;
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      )
+    );
+  };
 
   return (
     <>
@@ -28,16 +38,20 @@ function App() {
 
           <input type="text" value={todo} placeholder="Add new Task" className="bg-neutral-500 p-1.5 pl-1.5 rounded-xl w-[240px]" onChange={handleChange} />
 
-          <button onClick={handleAdd} className="bg-blue-600 p-2 hover:bg-blue-800 rounded-xl cursor-pointer text-sm font-bold">Add Todo</button>
+          <button onClick={handleAdd} className="bg-blue-600 p-2 hover:bg-blue-400 rounded-xl cursor-pointer text-sm font-bold">Add Todo</button>
 
         </div>
 
         {todos.map(item => {
-          return <div className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
-            <div className="text">{item.todo}</div>
-            <div className="buttons flex gap-2.5 items-center">
-              <button className="bg-green-700 p-1 w-16">Edit</button>
-              <button className="bg-red-600 p-1 w-16">Delete</button>
+          return <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
+            
+            <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id=''/>
+
+            <div className={item.isCompleted?"line-through":""}>{item.todo}</div>
+
+            <div className="buttons flex gap-2.5 items-center text-sm font-bold">
+              <button className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
+              <button className="bg-red-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Delete</button>
             </div>
           </div>
         })}
