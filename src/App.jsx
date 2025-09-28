@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,10 +8,21 @@ function App() {
   const [todo, settodo] = useState("")
   const [todos, setTodos] = useState([])
 
+  useEffect(() => {
+    let todostring = JSON.parse(localStorage.getItem("tasks"))
+    if(todostring) {
+      let ts = JSON.parse(localStorage.getItem("tasks"))
+      setTodos(ts)
+    }
+  }, [])
+
+  const savetoLS = () => {
+    localStorage.setItem("tasks", JSON.stringify(todos))
+  }
+
   const handleAdd = () => {
     setTodos([...todos, { id: uuidv4(), todo, isCompleted: false }]);
     settodo("")
-    console.log(todos);
   }
 
   const handleChange = (e) => {
@@ -25,11 +36,12 @@ function App() {
         todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
       )
     );
+    savetoLS()
   };
 
   const handleDelete = (e) => {
     let id = e.target.name;
-    let index = todos.findIndex(item=>{
+    let index = todos.findIndex(item => {
       return item.id === id;
     })
     let newtodos = [...todos]
@@ -40,11 +52,12 @@ function App() {
   const handleEdit = (e) => {
     let edittodo = prompt("enter new todo: ")
     let id = e.target.name;
-    let index = todos.findIndex(item=>{
+    let index = todos.findIndex(item => {
       return item.id === id
     })
     let newTodos = [...todos];
     newTodos[index].todo = edittodo
+    savetoLS()
     setTodos(newTodos)
   };
 
@@ -63,12 +76,15 @@ function App() {
 
         </div>
 
+        {todos.length === 0 && <div className="m-4">Click Add Button to add Tasks</div>}
         {todos.map(item => {
           return <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
 
-            <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id='' />
+            <div className='flex gap-3 items-center'>
+              <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id='' />
 
-            <div className={item.isCompleted ? "line-through" : ""}>{item.todo}</div>
+              <div className={item.isCompleted ? "line-through" : ""}>{item.todo}</div>
+            </div>
 
             <div className="buttons flex gap-2.5 items-center text-sm font-bold">
               <button name={item.id} onClick={handleEdit} className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
