@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 function App() {
   const [todo, settodo] = useState("")
   const [todos, setTodos] = useState([])
+  const [showfinished, setshowfinished] = useState(true)
 
   useEffect(() => {
     let todostring = JSON.parse(localStorage.getItem("tasks"))
@@ -61,6 +62,11 @@ function App() {
     setTodos(newTodos)
   };
 
+  const clearLS = () => { 
+    localStorage.removeItem("tasks");
+    setTodos([])
+  }
+
   return (
     <>
       <Navbar />
@@ -72,11 +78,15 @@ function App() {
 
           <input type="text" value={todo} placeholder="Add new Task" className="bg-neutral-500 p-1.5 pl-1.5 rounded-xl w-[240px]" onChange={handleChange} />
 
-          <button onClick={handleAdd} className="bg-blue-600 p-2 hover:bg-blue-400 rounded-xl cursor-pointer text-sm font-bold">Add Todo</button>
+          <button onClick={handleAdd} disabled={todo.length <= 1} className="bg-blue-600 p-2 hover:bg-blue-400 rounded-xl cursor-pointer text-sm font-bold disabled:bg-blue-950 disabled:cursor-default">Add Todo</button>
 
         </div>
 
-        {todos.length === 0 && <div className="m-4">Click Add Button to add Tasks</div>}
+        <button onClick={clearLS} className="my-4 mr-4 bg-white text-black p-1 cursor-pointer">Clear List</button>
+
+        <input checked={showfinished} type="checkbox" /> Show Finished
+
+        {todos.length === 0 && <div className="my-4">Click Add Button to add Tasks</div>}
         {todos.map(item => {
           return <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
 
