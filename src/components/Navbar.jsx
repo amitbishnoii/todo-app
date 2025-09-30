@@ -7,9 +7,7 @@ const Navbar = () => {
             <span className="text-xl font-xl">Todo App</span>
         </div>
         <ul className="flex gap-3.5 mx-4">
-            <li className='cursor-pointer hover:font-bold transition-all duration-200'>Home</li>
-            <li className='cursor-pointer hover:font-bold transition-all duration-200'>Your Tasks</li>
-            <a href="https://github.com/amitbishnoii/todo-app"><li className='cursor-pointer hover:font-bold transition-all duration-200'>Github</li></a>
+            <a href="https://github.com/amitbishnoii/"><li className='cursor-pointer hover:font-bold transition-all duration-200'>Github</li></a>
         </ul>
     </nav>
   )

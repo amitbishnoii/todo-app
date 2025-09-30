@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import { v4 as uuidv4 } from 'uuid'
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { VscClearAll } from "react-icons/vsc";
 
 
 function App() {
@@ -11,7 +14,7 @@ function App() {
 
   useEffect(() => {
     let todostring = JSON.parse(localStorage.getItem("tasks"))
-    if(todostring) {
+    if (todostring) {
       let ts = JSON.parse(localStorage.getItem("tasks"))
       setTodos(ts)
     }
@@ -62,7 +65,7 @@ function App() {
     setTodos(newTodos)
   };
 
-  const clearLS = () => { 
+  const clearLS = () => {
     localStorage.removeItem("tasks");
     setTodos([])
   }
@@ -74,25 +77,27 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto bg-neutral-700 p-5 rounded-2xl my-8">
+      <div className="flex flex-col items-center  container mx-auto bg-neutral-700 p-5 rounded-2xl my-8 w-min-[60vw] w-1/2">
 
         <h1 className='font-bold text-xl'>Your Tasks</h1>
 
         <div className="add-todos flex items-center gap-2.5 text-white mt-3">
 
-          <input type="text" value={todo} placeholder="Add new Task" className="bg-neutral-500 p-1.5 pl-1.5 rounded-xl w-[240px]" onChange={handleChange} />
+          <input type="text" value={todo} placeholder="Add new Task" className="bg-neutral-500 p-1.5 pl-1.5 rounded-xl w-[320px]" onChange={handleChange} />
 
           <button onClick={handleAdd} disabled={todo.length <= 1} className="bg-blue-600 p-2 hover:bg-blue-400 rounded-xl cursor-pointer text-sm font-bold disabled:bg-blue-950 disabled:cursor-default">Add Todo</button>
 
         </div>
 
-        <button onClick={clearLS} className="my-4 mr-4 bg-white text-black p-1 cursor-pointer">Clear List</button>
+        <div className="flex items-center gap-2 justify-items-start">
+          <button onClick={clearLS} className="flex items-center justify-center my-4 mr-4 bg-white text-black w-10 h-10 cursor-pointer"><VscClearAll size={30}/></button>
 
-        <input onChange={toggleFinish} checked={showfinished} type="checkbox" /> Show Finished
+          <input onChange={toggleFinish} checked={showfinished} type="checkbox" /> Show Finished
+        </div>
 
         {todos.length === 0 && <div className="my-4">Click Add Button to add Tasks</div>}
         {todos.map(item => {
-          return (showfinished || !item.isCompleted) && <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
+          return (showfinished || !item.isCompleted) && <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[400px] mt-6">
 
             <div className='flex gap-3 items-center'>
               <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id='' />
@@ -101,8 +106,8 @@ function App() {
             </div>
 
             <div className="buttons flex gap-2.5 items-center text-sm font-bold">
-              <button name={item.id} onClick={handleEdit} className="bg-green-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Edit</button>
-              <button name={item.id} onClick={handleDelete} className="bg-red-500 p-1 w-16 cursor-pointer transition-all hover:rounded-2xl">Delete</button>
+              <button name={item.id} onClick={handleEdit} className="flex items-center justify-center bg-green-500 w-16 h-8 cursor-pointer transition-all hover:rounded-2xl"><FaRegEdit size={24}/></button>
+              <button name={item.id} onClick={handleDelete} className="flex items-center justify-center bg-red-500 w-16 h-8 cursor-pointer transition-all hover:rounded-2xl"><MdDelete size={24}/></button>
             </div>
           </div>
         })}
