@@ -67,6 +67,10 @@ function App() {
     setTodos([])
   }
 
+  const toggleFinish = () => {
+    setshowfinished(!showfinished)
+  }
+
   return (
     <>
       <Navbar />
@@ -84,11 +88,11 @@ function App() {
 
         <button onClick={clearLS} className="my-4 mr-4 bg-white text-black p-1 cursor-pointer">Clear List</button>
 
-        <input checked={showfinished} type="checkbox" /> Show Finished
+        <input onChange={toggleFinish} checked={showfinished} type="checkbox" /> Show Finished
 
         {todos.length === 0 && <div className="my-4">Click Add Button to add Tasks</div>}
         {todos.map(item => {
-          return <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
+          return (showfinished || !item.isCompleted) && <div key={item.id} className="flex todo-card my-2.5 gap-2.5 items-center justify-between w-[30%] mt-6">
 
             <div className='flex gap-3 items-center'>
               <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id='' />
